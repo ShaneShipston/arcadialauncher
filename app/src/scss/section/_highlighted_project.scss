@@ -1,0 +1,31 @@
+.highlighted-project {
+    padding: 1.5rem 2rem;
+
+    .summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .details {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+
+        li {
+            padding: 0 0.5rem;
+        }
+    }
+
+    .name {
+        margin: 0;
+        font-weight: 300;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+    }
+}

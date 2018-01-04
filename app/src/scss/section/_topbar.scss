@@ -1,0 +1,44 @@
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+    height: 2.75rem;
+    -webkit-app-region: drag;
+    margin: 0.25rem 0.25rem 0 0.25rem;
+}
+
+.titlebar img {
+    max-height: 17px;
+}
+
+.window-actions {
+    display: flex;
+    align-items: center;
+}
+
+.window-actions button {
+    padding: 0 0.3rem;
+    -webkit-app-region: no-drag;
+    cursor: pointer;
+
+    &:before {
+        cursor: pointer;
+    }
+
+    &:hover {
+        color: #60c3b0;
+    }
+}
+
+.window-actions button:last-child {
+    padding-right: 0;
+}
+
+.window-actions button.fa-times {
+    font-size: 1.3rem;
+
+    &:hover {
+        color: #d80b0b;
+    }
+}

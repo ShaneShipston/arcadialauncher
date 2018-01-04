@@ -1,0 +1,15 @@
+.console {
+    padding: 1.5rem 2rem;
+    height: 100%;
+
+    textarea {
+        height: 100%;
+        font-family: monospace;
+        border-radius: 0;
+        font-size: 0.9rem;
+        background: #293441;
+        color: white;
+        resize: none;
+        line-height: 1.3em;
+    }
+}

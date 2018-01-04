@@ -1,0 +1,31 @@
+{
+  "name": "arcadia-launcher",
+  "version": "0.1.0",
+  "description": "Vagrant site manager",
+  "repository": "",
+  "scripts": {
+    "postinstall": "install-app-deps"
+  },
+  "devDependencies": {
+    "electron-builder": "19.45.4",
+    "electron": "1.7.9",
+    "gulp": "^3.9.1",
+    "mocha": "^4.0.1",
+    "spectron": "^3.7.2",
+    "webpack-stream": "^3.2.0",
+    "bozon": "*"
+  },
+  "build": {
+    "appId": "com.arcadia.launcher",
+    "win": {},
+    "mac": {
+      "category": "your.app.category.type"
+    }
+  },
+  "dependencies": {
+    "command-exists": "^1.2.2",
+    "electron-window-state": "^4.1.1",
+    "strip-ansi": "^4.0.0"
+  },
+  "private": true
+}
