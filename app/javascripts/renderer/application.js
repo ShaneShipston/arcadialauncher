@@ -12,6 +12,8 @@ const remote = electron.remote;
 const homePath = (electron.app || electron.remote.app).getPath('home');
 const hostsPath = os.platform() === 'win32' ? 'C:\\Windows\\System32\\drivers\\etc\\hosts' : '/etc/hosts';
 
+let activeProject = null;
+
 /**
  * Defaults
  */
@@ -24,9 +26,15 @@ const appDefaults = {
     openBrowserWP: false,
     openBrowserHome: false,
     openBrowserSync: false,
+    createOpenEditor: false,
+    createOpenBrowser: false,
+    createOpenBrowserWP: false,
+    createOpenBrowserHome: false,
+    createOpenBrowserSync: false,
     initalCommit: true,
     initalCommitMsg: 'Cloned base theme',
     initalized: false,
+    defaultEditor: 'subl',
 };
 
 /**
@@ -76,7 +84,7 @@ electron.ipcRenderer.on('loaded' , function(event, data) {
 
         tempURL.addEventListener('click', (e) => {
             e.preventDefault();
-            openProject();
+            openProject(details);
         });
 
         tempElement.appendChild(tempURL);
@@ -276,7 +284,6 @@ saveSettings.addEventListener('click', () => {
 
 /**
  * Create Project
- * @todo Validation
  */
 const createProject = document.querySelector('.create-project');
 
@@ -296,6 +303,16 @@ createProject.addEventListener('click', (e) => {
         tld: store.get('tld'),
         type: projectType.value,
     });
+
+    // Validate inputs
+    if (project.get('domain').length < 2) {
+        return;
+    }
+
+    // project exists
+    if (projects.get(project.get('domain'))) {
+        return;
+    }
 
     openPage('.console');
 
@@ -321,25 +338,27 @@ createProject.addEventListener('click', (e) => {
         });
 
         // Exit early
-        if (project.get('type') === 'Blank') {
+        if (project.get('type') === 'blank') {
             terminal.log('\nDone!');
 
             const projectFeed = document.querySelector('.project-feed');
             const tempURL = document.createElement('a');
             const tempElement = document.createElement('li');
 
-            tempURL.innerHTML = `${domain.value}.${store.get('tld')}`;
+            tempURL.innerHTML = `${project.get('domain')}.${store.get('tld')}`;
             tempURL.setAttribute('href', '#');
 
             tempURL.addEventListener('click', (e) => {
                 e.preventDefault();
-                openProject();
+                openProject(project);
             });
 
             tempElement.appendChild(tempURL);
             projectFeed.appendChild(tempElement);
 
             projects.store(project);
+
+            form.reset();
             return;
         }
 
@@ -359,9 +378,8 @@ createProject.addEventListener('click', (e) => {
             project.set('repo', repo.value);
         }
 
-        // @todo this needs to be fixed up
         if (pages.value.length > 0) {
-            args.push('--pages', pages.value)
+            args.push('--pages', pages.value.replace('\n', ', '))
         }
 
         // Create WordPress install
@@ -378,6 +396,9 @@ createProject.addEventListener('click', (e) => {
         .then(() => {
             terminal.log('\nDone!');
 
+            const { exec } = require('child_process');
+            const commandToCheck = store.get('defaultEditor');
+
             const projectFeed = document.querySelector('.project-feed');
             const tempURL = document.createElement('a');
             const tempElement = document.createElement('li');
@@ -387,22 +408,78 @@ createProject.addEventListener('click', (e) => {
 
             tempURL.addEventListener('click', (e) => {
                 e.preventDefault();
-                openProject();
+                openProject(project);
             });
 
             tempElement.appendChild(tempURL);
             projectFeed.appendChild(tempElement);
 
             projects.store(project);
+
+            form.reset();
+
+            if (store.get('createOpenEditor')) {
+                commandExists(commandToCheck)
+                    .then((command) => {
+                        exec(`cd ${path.join(store.get('directory'), project.getThemeDirectory())} && ${command} .`, () => {});
+                    });
+            }
+
+            if (store.get('createOpenBrowser')) {
+                if (store.get('createOpenBrowserWP')) {
+                    electron.shell.openExternal(project.getURL('wp-admin'));
+                }
+
+                if (store.get('createOpenBrowserHome')) {
+                    electron.shell.openExternal(project.getURL());
+                }
+
+                if (store.get('createOpenBrowserSync')) {
+                    electron.shell.openExternal('http://localhost:3000/');
+                }
+            }
         });
     });
+});
+
+const openProjectAction = document.querySelector('.default-open-action');
+openProjectAction.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const { exec } = require('child_process');
+    const commandToCheck = store.get('defaultEditor');
+
+    if (store.get('openEditor')) {
+        commandExists(commandToCheck)
+            .then((command) => {
+                exec(`cd ${path.join(store.get('directory'), activeProject.getThemeDirectory())} && ${command} .`, () => {});
+            });
+    }
+
+    if (store.get('openDirectory')) {
+        electron.shell.openItem(path.join(store.get('directory'), activeProject.getThemeDirectory()));
+    }
+
+    if (store.get('openBrowser')) {
+        if (store.get('openBrowserWP') && activeProject.get('type') === 'wordpress') {
+            electron.shell.openExternal(activeProject.getURL('wp-admin'));
+        }
+
+        if (store.get('openBrowserHome')) {
+            electron.shell.openExternal(activeProject.getURL());
+        }
+
+        if (store.get('openBrowserSync') && activeProject.get('type') === 'wordpress') {
+            electron.shell.openExternal('http://localhost:3000/');
+        }
+    }
 });
 
 /**
  * Helpers
  */
 function applySettings(screen, store) {
-    const inputs = screen.querySelectorAll('input');
+    const inputs = screen.querySelectorAll('input, select');
 
     Array.from(inputs).forEach((target) => {
         switch (target.getAttribute('type')) {
@@ -486,6 +563,10 @@ function checkRequirements() {
             icon.classList.add('fa-check-circle');
         }
     });
+
+    // server running
+    // another server is running
+    // server has been set up
 }
 
 function openPage(...elements) {
@@ -503,7 +584,14 @@ function openPage(...elements) {
     terminal.clear();
 }
 
-function openProject() {
+function openProject(project) {
+    activeProject = project;
+
+    const projectViewer = document.querySelector('.highlighted-project');
+    const domainName = projectViewer.querySelector('.domain-name');
+
+    domainName.innerHTML = project.getDomainName();
+
     openPage('.highlighted-project');
 }
 

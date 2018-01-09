@@ -7,13 +7,13 @@
     "postinstall": "install-app-deps"
   },
   "devDependencies": {
-    "electron-builder": "19.45.4",
-    "electron": "1.7.9",
+    "bozon": "*",
+    "electron": "^1.8.1",
+    "electron-builder": "^19.53.2",
     "gulp": "^3.9.1",
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "spectron": "^3.7.2",
-    "webpack-stream": "^3.2.0",
-    "bozon": "*"
+    "webpack-stream": "^3.2.0"
   },
   "build": {
     "appId": "com.arcadia.launcher",

@@ -17,23 +17,26 @@ class Project {
     has(key) {
         return this.data.hasOwnProperty(key);
     }
-    getURL() {
-        return `http://${this.get('domain')}.${this.get('tld')}/`;
-    }
-    getDomainName() {
-        return `${this.get('domain')}.${this.get('tld')}`;
-    }
     getDomain() {
         return this.get('domain');
     }
+    getTheme() {
+        return this.get('theme') !== null ? this.get('theme') : this.getDomain();
+    }
+    getDomainName() {
+        return `${this.getDomain()}.${this.get('tld')}`;
+    }
+    getURL(uri = '') {
+        return `http://${this.getDomainName()}/${uri}`;
+    }
     getDirectory() {
-        return `sites/${this.get('domain')}`;
+        return `sites/${this.getDomain()}`;
     }
     getThemeDirectory() {
-        return `${this.getDirectory()}/wp-content/themes/${this.get('theme')}`;
+        return `${this.getDirectory()}/wp-content/themes/${this.getTheme()}`;
     }
     getRepo() {
-        return this.get('repo') !== null ? this.get('repo') : `shoutmedia/${this.get('domain')}`;
+        return this.get('repo') !== null ? this.get('repo') : `shoutmedia/${this.getDomain()}`;
     }
     structure() {
         return {

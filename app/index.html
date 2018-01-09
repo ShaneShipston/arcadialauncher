@@ -41,15 +41,8 @@
             <div class="domains">
                 <h6 class="heading">Active Projects</h6>
                 <ul class="project-feed"></ul>
-                <div class="btn-group">
-                    <div class="import">
-                        <span class="label">Import</span>
-                        <ul class="options">
-                            <li><a href="#"><img src="images/vagrant.svg" alt=""></a></li>
-                            <li><a href="#"><img src="images/bitbucket.svg" alt=""></a></li>
-                            <li><a href="#"><img src="images/archive.svg" alt=""></a></li>
-                        </ul>
-                    </div>
+                <div class="major-actions">
+                    <button class="btn btn-link import-project" type="button"><em class="fa fa-download"></em> Import</button>
                     <button class="btn btn-primary new-project-btn" type="button"><em class="fa fa-plus"></em> New Project</button>
                 </div>
             </div>
@@ -121,7 +114,7 @@
                 <div class="section new-project has-btns hidden">
                     <form>
                         <div class="form-group">
-                            <label>Domain</label>
+                            <label>Domain <span class="required">*</span></label>
                             <div class="form-flex">
                                 <input name="domain" type="text" placeholder="arcadia" class="has-suffix">
                                 <span class="suffix domain-tld"></span>
@@ -130,34 +123,36 @@
                         <div class="form-group">
                             <label>Project Type</label>
                             <select name="projectType">
-                                <option>Blank</option>
-                                <option selected>WordPress</option>
+                                <option value="wordpress" selected>WordPress</option>
+                                <option value="blank">Blank</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group req-wordpress">
                             <label>WordPress Title</label>
                             <input type="text" name="wpTitle" value="Dev Site">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group req-wordpress">
                             <label>Pages</label>
                             <textarea name="pages" placeholder="1 per line"></textarea>
                         </div>
 
-                        <div class="toggle-bar" data-target="preferences">
-                            <label>Preferences</label>
-                            <em class="fa fa-chevron-down"></em>
-                        </div>
-
-                        <div id="preferences" class="toggle-body hidden">
-                            <div class="form-group">
-                                <label>Theme Name</label>
-                                <input type="text" name="themeName" placeholder="arcadia">
-                                <p class="help">Defaults to domain name</p>
+                        <div class="req-wordpress">
+                            <div class="toggle-bar" data-target="preferences">
+                                <label>Preferences</label>
+                                <em class="fa fa-chevron-down"></em>
                             </div>
-                            <div class="form-group">
-                                <label>Git Repo</label>
-                                <input type="text" name="repo" placeholder="shoutmedia/arcadia">
-                                <p class="help">Defaults to shoutmedia/{domain}</p>
+
+                            <div id="preferences" class="toggle-body hidden">
+                                <div class="form-group">
+                                    <label>Theme Name</label>
+                                    <input type="text" name="themeName" placeholder="arcadia">
+                                    <p class="help">Defaults to domain name</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Git Repo</label>
+                                    <input type="text" name="repo" placeholder="shoutmedia/arcadia">
+                                    <p class="help">Defaults to shoutmedia/{domain}</p>
+                                </div>
                             </div>
                         </div>
                         <div class="btn-container fixed align-right">
@@ -167,19 +162,30 @@
                 </div>
                 <div class="section highlighted-project hidden">
                     <header class="summary">
-                        <h2 class="name">domain1.arc</h2>
+                        <h2 class="domain-name">domain.vm</h2>
                         <ul class="details">
-                            <li>WP 4.9.1</li>
-                            <li>12 Plugins</li>
+                            <li><a href="#"><em class="fa fa-cog"></em></a></li>
                         </ul>
                     </header>
                     <footer class="actions">
                         <div class="useful">
-                            <button type="button" class="btn btn-primary"><em class="fa fa-folder-open-o"></em> Open</button>
-                            <button type="button" class="btn btn-default"><em class="fa fa-server"></em> Deploy</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs btn-primary default-open-action"><em class="fa fa-folder-open-o"></em> Open</button>
+                                <button type="button" class="btn btn-xs btn-primary btn-icon"><em class="fa fa-caret-down"></em></button>
+                                <ul class="hidden drop-down">
+                                    <li><a href="#">Directory</a></li>
+                                    <li><a href="#">Editor</a></li>
+                                    <li><a href="#">Git Repo</a></li>
+                                    <li><a href="#">WP Dashboard</a></li>
+                                    <li><a href="#">Browser Home</a></li>
+                                    <li><a href="#">Browser Sync</a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-xs btn-default"><em class="fa fa-server"></em> Deploy</button>
+                            <button type="button" class="btn btn-xs btn-default"><em class="fa fa-refresh"></em> Sync</button>
                         </div>
                         <div class="destructive">
-                            <button type="button" class="btn btn-danger btn-outline"><em class="fa fa-frown-o"></em> Destroy</button>
+                            <button type="button" class="btn btn-xs btn-danger btn-outline"><em class="fa fa-frown-o"></em> Destroy</button>
                         </div>
                     </footer>
                 </div>
@@ -202,39 +208,39 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Default TLD</label>
+                        <label>TLD</label>
                         <input name="tld" type="text">
                     </div>
                     <div class="form-group">
-                        <label>Default Editor</label>
-                        <select name="" id="">
-                            <option>Atom</option>
-                            <option>Sublime Text</option>
-                            <option>VS Code</option>
+                        <label>Code Editor</label>
+                        <select name="defaultEditor">
+                            <option value="atom">Atom</option>
+                            <option value="subl">Sublime Text</option>
+                            <option value="code">VS Code</option>
                         </select>
                     </div>
                     <h2 class="headline">Project Creation</h2>
                     <div class="checkbox-group">
                         <div class="form-group">
-                            <input type="checkbox" name="openSublime" id="open-sublime" value="1">
-                            <label for="open-sublime">Open editor</label>
+                            <input type="checkbox" name="createOpenEditor" id="create-editor" value="1">
+                            <label for="create-editor">Open editor</label>
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" name="openBrowser" id="open-browser" data-toggle=".settings-project-create" value="1">
-                            <label for="open-browser">Open browser</label>
+                            <input type="checkbox" name="createOpenBrowser" id="create-browser" data-toggle=".settings-project-create" value="1">
+                            <label for="create-browser">Open browser</label>
                         </div>
                         <div class="settings-project-create nested-checkboxes hidden">
                             <div class="form-group">
-                                <input type="checkbox" name="openBrowserWP" id="open-browser-wp">
-                                <label for="open-browser-wp">WordPress Dashboard</label>
+                                <input type="checkbox" name="createOpenBrowserWP" id="create-browser-wp">
+                                <label for="create-browser-wp">WordPress Dashboard</label>
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="openBrowserHome" id="open-browser-home">
-                                <label for="open-browser-home">Home Page</label>
+                                <input type="checkbox" name="createOpenBrowserHome" id="create-browser-home">
+                                <label for="create-browser-home">Home Page</label>
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="openBrowserSync" id="open-browser-sync">
-                                <label for="open-browser-sync">BrowserSync Home</label>
+                                <input type="checkbox" name="createOpenBrowserSync" id="create-browser-sync">
+                                <label for="create-browser-sync">BrowserSync Home</label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -252,18 +258,18 @@
                     <h2 class="headline">Open Button</h2>
                     <div class="checkbox-group">
                         <div class="form-group">
-                            <input type="checkbox" name="openSublime" id="open-sublime" value="1">
-                            <label for="open-sublime">Open editor</label>
+                            <input type="checkbox" name="openEditor" id="open-editor" value="1">
+                            <label for="open-editor">Open editor</label>
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" name="openSublime" id="open-sublime" value="1">
-                            <label for="open-sublime">Open directory</label>
+                            <input type="checkbox" name="openDirectory" id="open-directory" value="1">
+                            <label for="open-directory">Open directory</label>
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" name="openSublime" id="open-sublime" value="1" data-toggle=".settings-project-create">
-                            <label for="open-sublime">Open browser</label>
+                            <input type="checkbox" name="openBrowser" id="open-browser" value="1" data-toggle=".settings-open-button">
+                            <label for="open-browser">Open browser</label>
                         </div>
-                        <div class="settings-project-create nested-checkboxes hidden">
+                        <div class="settings-open-button nested-checkboxes hidden">
                             <div class="form-group">
                                 <input type="checkbox" name="openBrowserWP" id="open-browser-wp">
                                 <label for="open-browser-wp">WordPress Dashboard</label>
