@@ -1,7 +1,6 @@
-# Testing
+# Arcadia Launcher
 
-> My Testing app built with Electron
-
+> Desktop application to assist with vagrant project management
 
 ## Dev
 
@@ -23,7 +22,6 @@ $ bozon package
 
 Builds the app for OS X, Linux, and Windows, using [electron-builder](https://github.com/electron-userland/electron-builder).
 
-
 ## License
 
-The MIT License (MIT) © Shane Shipston 2017
+The MIT License (MIT) © Shane Shipston 2018
