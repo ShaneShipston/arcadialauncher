@@ -265,7 +265,7 @@ restoreDefaults.addEventListener('click', () => {
 const saveSettings = document.querySelector('.save-settings');
 
 saveSettings.addEventListener('click', () => {
-    const inputs = document.querySelectorAll('.settings input');
+    const inputs = document.querySelectorAll('.settings input, .settings select');
     const values = {};
 
     Array.from(inputs).forEach((target) => {
