@@ -1,80 +1,89 @@
-require('bozon/lib/tasks');
+const gulp = require('gulp');
+const sass = require('gulp-sass');
+const prefix = require('gulp-autoprefixer');
+const minifycss = require('gulp-clean-css');
+const imagemin = require('gulp-imagemin');
+const webpackconfig = Object.create(require('./webpack.config.js'));
+const webpack = require('webpack');
+const gutil = require('gulp-util');
 
-//== Bozon tasks =============================================================================
-//
-// Bozon carries out common tasks: start, test, clear, package
-// If you want to add or override some tasks, you should require bozon:
-//
-var bozon = require('bozon/lib/bozon');
-//
-// which acts a simple wrapper for gulp.
-// So now you can use `bozon.task`,  `bozon.src` and `bozon.dest` to define
-// your tasks. Bozon will handle proper app and build paths for you.
-//
-// ===========================================================================================
+const config = {
+    src: {
+        img: 'src/img/**/*.{png,jpg,gif}',
+        js: 'src/js/**/*.js',
+        css: 'src/scss/**/*.scss',
+    },
+    dest: {
+        img: 'images',
+        js: 'javascripts/renderer/',
+        css: 'stylesheets',
+    },
+};
 
-// If you want to use CoffeeScript or any other compiled to Javascript language
-// in your project, you can add corresponding gulp plugin to package.json
-// include it and define task that will compile your code:
-//
-// coffee = require('gulp-coffee');
-//
-// bozon.task('scripts:main', function() {
-//   return bozon.src('javascripts/main/**/*.coffee')
-//     .pipe(coffee({bare: true}))
-//     .pipe(bozon.dest('javascripts/main'));
-// });
+gulp.task('watch', () => {
+    // CSS
+    watch(config.src.css, () => {
+        gulp.start('styles');
+    });
 
-// If you want to use Sass or Stylus in your project, you can add corresponding
-// gulp plugin to package.json, include it and define task that will compile
-// your code:
-//
-// sass = require('gulp-sass');
-//
-// bozon.task('styles', function() {
-//   return bozon.src('stylesheets/application.sass').pipe(sass.sync({
-//     outputStyle: 'expanded',
-//     precision: 10
-//   }).on('error', sass.logError)).pipe(bozon.dest('stylesheets'));
-// });
+    // Images
+    watch(config.src.img, { events: ['add'], readDelay: 500 })
+        .pipe(imagemin())
+        .pipe(gulp.dest(config.dest.img));
 
-//== Using the "build"-pipeline ==============================================================
-//
-// If you want to add individual/additional task to the build-pipeline, you can
-// use `bozon.buildTask` instead of `bozon.task`. This is adding a new task to
-// the end of the build-pipeline.
-//
-// Bozons build-pipeline contains the following tasks in the given order:
-// 1. scripts:main
-// 2. scripts:renderer
-// 3. styles
-// 4. html
-// 5. images
-// 6. config
-//
-// If you want to add your task into a defined position, use
-// `bozon.buildTaskBefore(existingTaskName, newTaskName, [dependencies,] taskFunction)` or
-// `bozon.buildTaskAfter(existingTaskName, newTaskName, [dependencies,] taskFunction)`.
-//
-// For example:
-//
-// sass = require('gulp-sass');
-//
-// bozon.buildTaskAfter('styles', 'styles:sass', function() {
-//   return bozon.src('stylesheets/**/*.sass').pipe(sass.sync({
-//     outputStyle: 'expanded',
-//     precision: 10
-//   }).on('error', sass.logError)).pipe(bozon.dest('stylesheets'));
-// });
-//
-//============================================================================================
-
-//== Task names that are already used by bozon ===============================================
-//
-// html, styles, images, scripts:main, scripts:renderer, prepare:app
-//
-//============================================================================================
-
-bozon.buildTaskAfter('styles', 'styles:fonts', function() {
-    return bozon.src('fonts/**/*').pipe(bozon.dest('fonts'));
+    // JS
+    watch(config.src.js, () => {
+        gulp.start('javascript');
+    });
 });
+
+gulp.task('styles', () => {
+    gulp.src(config.src.css)
+        .pipe(sass({
+            outputStyle: 'compressed',
+        }).on('error', sass.logError))
+        .pipe(prefix({
+            cascade: false,
+        }))
+        .pipe(minifycss())
+        .pipe(gulp.dest(config.dest.css));
+});
+
+gulp.task('images', () => {
+    gulp.src(config.src.img)
+        .pipe(imagemin())
+        .pipe(gulp.dest(config.dest.img));
+});
+
+gulp.task('javascript', (callback) => {
+    webpack(webpackconfig, (err, stats) => {
+        if (err) {
+            throw new gutil.PluginError('webpack:build', err);
+        }
+
+        gutil.log('[webpack:build]', stats.toString({
+            colors: true,
+        }));
+
+        callback();
+    });
+});
+
+// --- [BUILD TASKS] ---
+
+gulp.task('build', () => {
+    gulp.src(config.src.css)
+        .pipe(sass({
+            outputStyle: 'compressed',
+            errLogToConsole: true,
+        }))
+        .pipe(prefix({
+            remove: false,
+            cascade: false,
+        }))
+        .pipe(minifycss())
+        .pipe(gulp.dest(config.dest.css));
+});
+
+gulp.task('init', ['styles', 'javascript']);
+gulp.task('default', ['styles', 'images', 'javascript', 'watch']);

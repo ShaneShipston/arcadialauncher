@@ -1,0 +1,54 @@
+.dropdown {
+    position: absolute;
+    bottom: 140%;
+    right: 0;
+    background: #878d94;
+    padding: 0.75rem 1rem;
+    border-radius: 0.325rem;
+    z-index: 10;
+    list-style: none;
+    margin: 0;
+    display: none;
+    box-shadow: 1px 1px 10px 2px fade-out(black, 0.7);
+
+    &.open {
+        display: block;
+    }
+
+    &:before {
+        top: 100%;
+        right: 7%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: transparent;
+        border-top-color: #878d94;
+        border-width: 6px;
+    }
+
+    button {
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        font-weight: 300;
+        text-transform: uppercase;
+        line-height: 1em;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    li:not(:first-child) {
+        margin-top: 0.5rem;
+    }
+
+    .fa {
+        font-size: 0.88rem;
+        width: 1rem;
+        text-align: center;
+        opacity: 0.8;
+        margin-right: 6px;
+    }
+}

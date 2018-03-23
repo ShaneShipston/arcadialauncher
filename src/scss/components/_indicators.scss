@@ -1,0 +1,96 @@
+.led-red,
+.led-blue,
+.led-yellow,
+.led-green,
+.led-blank {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+
+    &.small {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+.led-red {
+    background-color: #F00;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 3px 1px, inset #441313 0 -1px 6px;
+
+    &.running {
+        animation: blinkRed 1s infinite;
+    }
+
+    &.fast {
+        animation: blinkRed 0.5s infinite;
+    }
+}
+
+@keyframes blinkRed {
+    50% {
+        background-color: #A00;
+    }
+}
+
+.led-yellow {
+    background-color: #FF0;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 3px 1px, inset #808002 0 -1px 6px;
+
+    &.running {
+        animation: blinkYellow 1s infinite;
+    }
+
+    &.fast {
+        animation: blinkYellow 0.5s infinite;
+    }
+}
+
+@keyframes blinkYellow {
+    50% {
+        background-color: #AA0;
+    }
+}
+
+.led-green {
+    background-color: #ABFF00;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 3px 1px, inset #304701 0 -1px 6px;
+
+    &.running {
+        animation: blinkGreen 1s infinite;
+    }
+
+    &.fast {
+        animation: blinkGreen 0.5s infinite;
+    }
+}
+
+@keyframes blinkGreen {
+    50% {
+        background-color: #81b517;
+    }
+}
+
+.led-blue {
+    background-color: #24E0FF;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 3px 1px, inset #006 0 -1px 6px;
+
+    &.running {
+        animation: blinkBlue 1s infinite;
+    }
+
+    &.fast {
+        animation: blinkBlue 0.5s infinite;
+    }
+}
+
+@keyframes blinkBlue {
+    50% {
+        background-color: #0ea1b9;
+    }
+}
+
+.led-blank {
+    background-color: #c5c8cc;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 3px 1px, inset #000 0 -1px 6px;
+}

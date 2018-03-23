@@ -2,25 +2,17 @@
 
 > Desktop application to assist with vagrant project management
 
-## Dev
+## Get started
 
 ```
-$ npm install && npm install -g bozon
+$ npm install && npm install -g electron
 ```
 
 ### Run
 
 ```
-$ bozon start
+$ npm start
 ```
-
-### Package
-
-```
-$ bozon package
-```
-
-Builds the app for OS X, Linux, and Windows, using [electron-builder](https://github.com/electron-userland/electron-builder).
 
 ## License
 

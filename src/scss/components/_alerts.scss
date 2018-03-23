@@ -1,0 +1,46 @@
+.alerts {
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    margin: -0.325rem -0.325rem 0 0;
+    background: #ab3333;
+
+    .arrows {
+        margin-right: 0.75rem;
+
+        button {
+            padding: 0 0.25rem;
+
+            &[disabled] {
+                opacity: 0.5;
+            }
+        }
+    }
+
+    .messages {
+        flex: 1;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 0.88rem;
+
+        li {
+            display: none;
+            align-items: center;
+
+            &.active {
+                display: flex;
+            }
+
+            .msg {
+                flex: 1;
+            }
+        }
+    }
+
+    .actions {
+        button {
+            border-radius: 0;
+        }
+    }
+}

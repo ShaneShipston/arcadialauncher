@@ -1,0 +1,27 @@
+.headline {
+    font-weight: 300;
+    position: relative;
+    padding-bottom: 0.75rem;
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &:not(:first-child) {
+        margin-top: 1.5rem;
+    }
+
+    &:before {
+        content: "";
+        border-bottom: 2px solid #60c3b0;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 4rem;
+    }
+}
+
+.title {
+    margin: 0;
+    font-weight: 300;
+}
