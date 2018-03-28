@@ -24,7 +24,7 @@ export default class Server {
             'https://ShaneShipston@bitbucket.org/ShaneShipston/arcadiadirectory.git',
             this.options.directory,
         ]).then(() => {
-            this.boot();
+            return this.boot();
         });
     }
     boot() {
