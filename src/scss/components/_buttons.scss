@@ -17,6 +17,10 @@ button {
     border-radius: 0.125rem;
     border: 2px solid transparent;
 
+    &[disabled] {
+        opacity: 0.7;
+    }
+
     &.btn-default {
         background: #919191;
         border-color: #919191;
