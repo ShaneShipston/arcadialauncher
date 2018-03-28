@@ -613,6 +613,8 @@ createProject.addEventListener('click', () => {
 
     // Validate inputs
     if (project.get('domain').length < 2) {
+        errorOutput.classList.remove('hidden');
+        errorOutput.innerHTML = 'Domain is required';
         return;
     }
 
