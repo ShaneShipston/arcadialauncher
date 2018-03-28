@@ -323,15 +323,21 @@ const initServer = document.querySelector('.init-server');
 
 initServer.addEventListener('click', () => {
     if (store.get('initalized')) {
-        server.boot();
+        server.boot().then(() => {
+            initServer.classList.add('hidden');
+        });
         return;
     }
 
     fs.access(path.join(store.get('directory'), 'Vagrantfile'), fs.R_OK, (err) => {
         if (err) {
-            server.init();
+            server.init().then(() => {
+                initServer.classList.add('hidden');
+            });
         } else {
-            server.boot();
+            server.boot().then(() => {
+                initServer.classList.add('hidden');
+            });
         }
     });
 
