@@ -708,7 +708,7 @@ createProject.addEventListener('click', () => {
         }
 
         if (pages.value.length > 0) {
-            args.push('--pages', pages.value.replace('\n', ', '));
+            args.push('--pages', pages.value.replace(/\n/g, ', '));
         }
 
         // Create WordPress install
