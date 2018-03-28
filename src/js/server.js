@@ -35,6 +35,7 @@ export default class Server {
         ])
         .then(() => {
             this.options.terminal.log('\nServer running!');
+            this.setIndicatorStatus('complete');
         });
     }
     status() {
