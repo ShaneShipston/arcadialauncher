@@ -265,15 +265,47 @@ function checkDirectoryRepo() {
  * App Loaded
  */
 electron.ipcRenderer.on('loaded', () => {
+    const initServerButton = document.querySelector('.init-server');
+
     /**
      * System Checks
      */
     checkRequirements();
 
     /**
-     * Repo Check
+     * Check folder is set up
      */
-    checkDirectoryRepo();
+    if (store.get('initalized')) {
+        initServerButton.innerHTML = 'Checking server status';
+
+        /**
+         * Repo Check
+         */
+        checkDirectoryRepo();
+
+        /**
+         * Check Server Status
+         */
+        server.setIndicatorStatus('verifying');
+
+        server.status().then((online) => {
+            if (online) {
+                server.setIndicatorStatus('complete');
+                initServerButton.classList.add('hidden');
+            } else if (store.get('startServer')) {
+                server.setIndicatorStatus('running');
+                server.boot().then(() => {
+                    initServerButton.classList.add('hidden');
+                });
+            } else {
+                server.setIndicatorStatus('error');
+                initServerButton.innerHTML = 'Boot server';
+                initServerButton.disabled = false;
+            }
+        });
+    } else {
+        initServerButton.disabled = false;
+    }
 
     /**
      * Populate Project Feed
@@ -296,24 +328,6 @@ electron.ipcRenderer.on('loaded', () => {
 
     activeButton.classList.remove('active');
     newActiveButton.classList.add('active');
-
-    /**
-     * Check Server Status
-     */
-    server.setIndicatorStatus('verifying');
-
-    server.status().then((online) => {
-        if (online) {
-            server.setIndicatorStatus('complete');
-        } else if (store.get('startServer')) {
-            server.setIndicatorStatus('running');
-            server.boot().then(() => {
-                server.setIndicatorStatus('complete');
-            });
-        } else {
-            server.setIndicatorStatus('error');
-        }
-    });
 });
 
 /**
