@@ -28,10 +28,13 @@ export default class Console {
     }
     log(line) {
         this.options.output.value += `${stripAnsi(line.toString())}`;
-        this.options.output.scrollTop = this.options.output.scrollHeight;
+        this.focusBottom();
     }
     clear() {
         this.options.output.value = '';
         this.setIndicatorStatus('idle');
+    }
+    focusBottom() {
+        this.options.output.scrollTop = this.options.output.scrollHeight;
     }
 }
