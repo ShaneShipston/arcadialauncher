@@ -512,6 +512,7 @@ openProjects.addEventListener('click', (e) => {
 
 openConsole.addEventListener('click', () => {
     openPage('.console');
+    terminal.focusBottom();
 });
 
 openSettings.addEventListener('click', (e) => {
