@@ -521,30 +521,13 @@ new Toolbar({
 /**
  * Navigation
  */
-const openProjects = document.querySelector('.primary-nav .open-projects');
-const openSettings = document.querySelector('.primary-nav .open-settings');
 const openConsole = document.querySelector('.primary-nav .open-console');
-const openImport = document.querySelector('.import-project-btn');
 const newProject = document.querySelector('.new-project-btn');
-
-openProjects.addEventListener('click', (e) => {
-    e.preventDefault();
-    openPage('.dashboard');
-});
 const pageTriggers = document.querySelectorAll('[data-page]');
 
 openConsole.addEventListener('click', () => {
     openPage('.console');
     terminal.focusBottom();
-});
-
-openSettings.addEventListener('click', (e) => {
-    e.preventDefault();
-    openPage('.settings');
-});
-
-openImport.addEventListener('click', () => {
-    openPage('.import-project');
 });
 
 newProject.addEventListener('click', () => {

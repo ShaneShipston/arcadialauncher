@@ -23,16 +23,16 @@
         <nav class="primary-nav">
             <ul>
                 <li class="active">
-                    <a href="#" class="open-projects">
+                    <button type="button" data-page="dashboard">
                         <em class="fa fa-dashboard"></em>
                         Dashboard
-                    </a>
+                    </button>
                 </li>
                 <li>
-                    <a href="#" class="open-settings">
+                    <button type="button" data-page="settings">
                         <em class="fa fa-cogs"></em>
                         Settings
-                    </a>
+                    </button>
                 </li>
             </ul>
             <div class="app-status">
@@ -72,7 +72,7 @@
                 </h6>
                 <ul class="project-feed"></ul>
                 <div class="major-actions">
-                    <button class="btn btn-link import-project-btn" type="button"><em class="fa fa-download"></em> Import</button>
+                    <button class="btn btn-link import-project-btn" type="button" data-page="import-project"><em class="fa fa-download"></em> Import</button>
                     <button class="btn btn-primary new-project-btn" type="button"><em class="fa fa-plus"></em> New Project</button>
                 </div>
             </div>
