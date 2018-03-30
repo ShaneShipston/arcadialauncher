@@ -531,6 +531,7 @@ openProjects.addEventListener('click', (e) => {
     e.preventDefault();
     openPage('.dashboard');
 });
+const pageTriggers = document.querySelectorAll('[data-page]');
 
 openConsole.addEventListener('click', () => {
     openPage('.console');
@@ -549,6 +550,12 @@ openImport.addEventListener('click', () => {
 newProject.addEventListener('click', () => {
     document.querySelector('.domain-tld').innerHTML = `.${store.get('tld')}`;
     openPage('.new-project');
+});
+
+Array.from(pageTriggers).forEach((target) => {
+    target.addEventListener('click', () => {
+        openPage(`.${target.getAttribute('data-page')}`);
+    });
 });
 
 /**
