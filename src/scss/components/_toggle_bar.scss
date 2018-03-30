@@ -8,7 +8,8 @@
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 
-    &:hover {
+    &:hover,
+    &.open {
         background: fade-out(white, 0.8);
         border-color: transparent;
     }

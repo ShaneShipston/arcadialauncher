@@ -419,12 +419,14 @@ Array.from(ignoreAlerts).forEach((target) => {
 const toggleBar = document.querySelectorAll('.toggle-bar');
 
 Array.from(toggleBar).forEach((target) => {
-    target.addEventListener('click', (e) => {
-        e.preventDefault();
-
+    target.addEventListener('click', () => {
         const element = document.getElementById(target.getAttribute('data-target'));
+        const icon = target.querySelector('.fa');
 
         element.classList.toggle('hidden');
+        target.classList.toggle('open');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-right');
     });
 });
 
