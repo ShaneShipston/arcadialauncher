@@ -264,8 +264,10 @@ function checkDirectoryRepo() {
 /**
  * App Loaded
  */
-electron.ipcRenderer.on('loaded', () => {
+electron.ipcRenderer.on('loaded', (event, data) => {
     const initServerButton = document.querySelector('.init-server');
+
+    document.querySelector('.app-version').innerHTML = data.appVersion;
 
     checkRequirements();
 
