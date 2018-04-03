@@ -267,25 +267,13 @@ function checkDirectoryRepo() {
 electron.ipcRenderer.on('loaded', () => {
     const initServerButton = document.querySelector('.init-server');
 
-    /**
-     * System Checks
-     */
     checkRequirements();
 
-    /**
-     * Check folder is set up
-     */
     if (store.get('initalized')) {
         initServerButton.innerHTML = 'Checking server status';
 
-        /**
-         * Repo Check
-         */
         checkDirectoryRepo();
 
-        /**
-         * Check Server Status
-         */
         server.setIndicatorStatus('verifying');
 
         server.status().then((online) => {
@@ -307,9 +295,6 @@ electron.ipcRenderer.on('loaded', () => {
         initServerButton.disabled = false;
     }
 
-    /**
-     * Populate Project Feed
-     */
     switch (store.get('projectOrder')) {
     default:
     case 'created':
