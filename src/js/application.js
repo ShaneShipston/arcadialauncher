@@ -269,6 +269,12 @@ electron.ipcRenderer.on('loaded', (event, data) => {
 
     document.querySelector('.app-version').innerHTML = data.appVersion;
 
+    const tldHolders = document.querySelectorAll('.domain-tld');
+
+    Array.from(tldHolders).forEach((target) => {
+        target.innerHTML = `.${store.get('tld')}`;
+    });
+
     checkRequirements();
 
     if (store.get('initalized')) {
@@ -509,17 +515,11 @@ new Toolbar({
  * Navigation
  */
 const openConsole = document.querySelector('.primary-nav .open-console');
-const newProject = document.querySelector('.new-project-btn');
 const pageTriggers = document.querySelectorAll('[data-page]');
 
 openConsole.addEventListener('click', () => {
     openPage('.console');
     terminal.focusBottom();
-});
-
-newProject.addEventListener('click', () => {
-    document.querySelector('.domain-tld').innerHTML = `.${store.get('tld')}`;
-    openPage('.new-project');
 });
 
 Array.from(pageTriggers).forEach((target) => {
