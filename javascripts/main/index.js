@@ -3,7 +3,21 @@ const windowStateKeeper = require('electron-window-state');
 const path = require('path');
 const json = require('../../package.json');
 
-let window;
+let arcadiaWindow;
+
+const isSecondInstance = app.makeSingleInstance(() => {
+    if (arcadiaWindow) {
+        if (arcadiaWindow.isMinimized()) {
+            arcadiaWindow.restore();
+        }
+
+        arcadiaWindow.focus();
+    }
+})
+
+if (isSecondInstance) {
+    app.quit();
+}
 
 app.on('ready', function() {
     let mainWindowState = windowStateKeeper({
@@ -11,7 +25,7 @@ app.on('ready', function() {
         defaultHeight: json.settings.height,
     });
 
-    window = new BrowserWindow({
+    arcadiaWindow = new BrowserWindow({
         title: json.name,
         x: mainWindowState.x,
         y: mainWindowState.y,
@@ -23,18 +37,18 @@ app.on('ready', function() {
         backgroundColor: '#2a3542',
     });
 
-    mainWindowState.manage(window);
+    mainWindowState.manage(arcadiaWindow);
 
-    window.loadURL('file://' + path.join(__dirname, '..', '..') + '/index.html');
+    arcadiaWindow.loadURL('file://' + path.join(__dirname, '..', '..') + '/index.html');
 
-    window.webContents.on('did-finish-load', function() {
-        window.webContents.send('loaded', {
+    arcadiaWindow.webContents.on('did-finish-load', function() {
+        arcadiaWindow.webContents.send('loaded', {
             appName: json.name,
             appVersion: json.version,
         });
     });
 
-    window.on('closed', function() {
-        window = null;
+    arcadiaWindow.on('closed', function() {
+        arcadiaWindow = null;
     });
 });
