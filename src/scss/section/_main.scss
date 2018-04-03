@@ -218,15 +218,12 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
+            cursor: pointer;
         }
 
         .label {
             margin-right: 0.325rem;
             opacity: 0.6;
         }
-    }
-
-    .open-console {
-        cursor: pointer;
     }
 }
