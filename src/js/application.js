@@ -289,21 +289,31 @@ function checkDirectoryRepo() {
 
             const isBehind = stdout.indexOf('behind');
 
-            if (isBehind >= 0) {
-                const changeString = stdout.substring(stdout.indexOf('[', isBehind - 10) + 1, stdout.indexOf(']'));
+            if (isBehind < 0) {
+                return;
+            }
 
-                const aboveBelow = changeString.split(',');
-                const belowCount = parseInt(aboveBelow.pop().trim().substring(7), 10);
+            const changeString = stdout.substring(stdout.indexOf('[', isBehind - 10) + 1, stdout.indexOf(']'));
 
-                if (belowCount > 0) {
-                    const alerts = document.querySelector('.alerts');
-                    const warning = alerts.querySelector('li:first-child');
+            const aboveBelow = changeString.split(',');
+            const belowCount = parseInt(aboveBelow.pop().trim().substring(7), 10);
 
-                    alerts.classList.remove('hidden');
-                    warning.classList.remove('hidden');
+            if (belowCount > 0) {
+                alertBox.addIssue(`Your working directory is behind by ${belowCount} commit${belowCount !== 1 ? 's' : ''}`, [
+                    {
+                        label: 'Update',
+                        callback: (resolve, reject) => {
+                            server.exec('git stash && git merge origin/master', (error) => {
+                                if (error) {
+                                    return;
+                                }
 
-                    warning.querySelector('.msg').innerHTML = `Your working directory is behind by ${belowCount} commit${belowCount !== 1 ? 's' : ''}`;
-                }
+                                server.exec('find scripts -type f -print0 | xargs -0 dos2unix');
+                                resolve();
+                            });
+                        }
+                    }
+                ]);
             }
         });
     });
@@ -397,35 +407,6 @@ initServer.addEventListener('click', () => {
     });
 
     store.set('initalized', true);
-});
-
-/**
- * Update Server
- */
-const updateServer = document.querySelector('.update-server');
-
-updateServer.addEventListener('click', () => {
-    updateServer.classList.add('btn-load');
-
-    exec(`cd ${store.get('directory')} && git stash && git merge origin/master`, (error) => {
-        if (error) {
-            return;
-        }
-
-        exec(`cd ${store.get('directory')} && find scripts -type f -print0 | xargs -0 dos2unix`, (error2) => {
-            if (error2) {
-                return;
-            }
-
-            const alerts = document.querySelector('.alerts');
-            const warning = alerts.querySelector('li:first-child');
-
-            alerts.classList.add('hidden');
-            warning.classList.add('hidden');
-
-            updateServer.classList.remove('btn-load');
-        });
-    });
 });
 
 /**
