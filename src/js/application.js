@@ -99,23 +99,6 @@ function applySettings(screen) {
     });
 }
 
-// function conflictChecks() {
-//     const request = remote.net.request(`http://${store.get('serverIP')}`);
-
-//     request.on('response', (response) => {
-//         console.log(response.statusCode);
-//     });
-
-//     request.on('error', (error) => {
-//         console.log(error);
-//     });
-
-//     request.end();
-
-//     // check server running (vagrant status)
-//     // another server is running (vagrant status fail + http access)
-// }
-
 function checkRequirements() {
     const systemChecks = document.querySelectorAll('.system-checks li[data-command]');
     const editCheck = document.querySelector('.system-checks li.edit-check');
