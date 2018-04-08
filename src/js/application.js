@@ -183,6 +183,37 @@ function openProject(project) {
     openPage('.highlighted-project');
 }
 
+function deleteProject(projectToDelete) {
+    return server.bash('delete-domain.sh', [
+        '--site',
+        projectToDelete.get('domain'),
+    ])
+    .then(() => {
+        const highlightedProject = document.querySelector('.highlighted-project');
+
+        // Remove domain from hosts file
+        fs.readFile(hostsPath, 'utf8', (err, data) => {
+            if (err) {
+                return;
+            }
+
+            let newData = data.replace(`${store.get('serverIP')} ${projectToDelete.getDomainName()}\n`, '');
+            newData = newData.replace(`${store.get('serverIP')} ${projectToDelete.getDomainName()}`, '');
+
+            fs.writeFile(hostsPath, newData, 'utf8', () => {});
+        });
+
+        projects.delete(projectToDelete.get('domain'));
+
+        updateProjectListBasedOnPreference();
+
+        if (!highlightedProject.classList.contains('hidden') &&
+            projectToDelete.getDomainName() === activeProject.getDomainName()) {
+            openPage('.dashboard');
+        }
+    });
+}
+
 function updateProjectList(allProjects) {
     const projectFeed = document.querySelector('.project-feed');
 
@@ -806,34 +837,7 @@ deleteProjectButton.addEventListener('click', () => {
     // Check for unstaged changes on WordPress only for now
     // git diff-index --quiet HEAD -- || echo "untracked";
 
-    const projectToDelete = activeProject;
-
-    server.bash('delete-domain.sh', [
-        '--site',
-        projectToDelete.get('domain'),
-    ])
-    .then(() => {
-        const highlightedProject = document.querySelector('.highlighted-project');
-
-        // Remove domain from hosts file
-        fs.readFile(hostsPath, 'utf8', (err, data) => {
-            if (err) {
-                return;
-            }
-
-            let newData = data.replace(`${store.get('serverIP')} ${projectToDelete.getDomainName()}\n`, '');
-            newData = newData.replace(`${store.get('serverIP')} ${projectToDelete.getDomainName()}`, '');
-
-            fs.writeFile(hostsPath, newData, 'utf8', () => {});
-        });
-
-        projects.delete(projectToDelete.get('domain'));
-        updateProjectList(projects.sortByAge());
-
-        if (!highlightedProject.classList.contains('hidden')) {
-            openPage('.dashboard');
-        }
-    });
+    deleteProject(activeProject);
 });
 
 /**
