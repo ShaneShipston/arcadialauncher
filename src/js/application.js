@@ -620,21 +620,8 @@ createProject.addEventListener('click', () => {
 
         if (project.get('type') === 'blank') {
             const projectFeed = document.querySelector('.project-feed');
-            const tempURL = document.createElement('a');
-            const tempElement = document.createElement('li');
             const wordPressFields = document.querySelectorAll('.req-wordpress');
             const commandToCheck = store.get('defaultEditor');
-
-            tempURL.innerHTML = `${project.get('domain')}.${store.get('tld')}`;
-            tempURL.setAttribute('href', '#');
-
-            tempURL.addEventListener('click', (event) => {
-                event.preventDefault();
-                openProject(project);
-            });
-
-            tempElement.appendChild(tempURL);
-            projectFeed.appendChild(tempElement);
 
             projects.store(project);
 
@@ -664,6 +651,8 @@ createProject.addEventListener('click', () => {
             }
 
             createProject.classList.remove('btn-load');
+
+            updateProjectListBasedOnPreference();
 
             return;
         }
@@ -702,20 +691,7 @@ createProject.addEventListener('click', () => {
         .then(() => {
             const commandToCheck = store.get('defaultEditor');
             const projectFeed = document.querySelector('.project-feed');
-            const tempURL = document.createElement('a');
-            const tempElement = document.createElement('li');
             const wordPressFields = document.querySelectorAll('.req-wordpress');
-
-            tempURL.innerHTML = `${project.get('domain')}.${project.get('tld')}`;
-            tempURL.setAttribute('href', '#');
-
-            tempURL.addEventListener('click', (event) => {
-                event.preventDefault();
-                openProject(project);
-            });
-
-            tempElement.appendChild(tempURL);
-            projectFeed.appendChild(tempElement);
 
             projects.store(project);
 
@@ -745,6 +721,8 @@ createProject.addEventListener('click', () => {
             }
 
             createProject.classList.remove('btn-load');
+
+            updateProjectListBasedOnPreference();
         });
     });
 });
