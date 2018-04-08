@@ -186,6 +186,19 @@ function openProject(project) {
 
     domainName.innerHTML = project.getDomainName();
 
+    if (!fs.existsSync(project.getDirectory())) {
+        alertBox.addIssue(`The project folder for "${project.getDomainName()}" is missing.`, [
+            {
+                label: 'Delete',
+                callback: (resolve, reject) => {
+                    deleteProject(project).then(() => {
+                        resolve();
+                    });
+                },
+            }
+        ]);
+    }
+
     openPage('.highlighted-project');
 }
 
