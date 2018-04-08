@@ -92,4 +92,7 @@ export default class Server {
             this.indicator.setState(state);
         }
     }
+    exec(command, callback = () => {}) {
+        exec(`cd ${this.options.directory} && ${command}`, callback);
+    }
 }
