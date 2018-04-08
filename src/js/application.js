@@ -175,6 +175,7 @@ function openPage(...elements) {
     elements.forEach((target) => {
         const section = document.querySelector(target);
         section.classList.remove('hidden');
+        section.scrollTop = 0;
     });
 }
 
