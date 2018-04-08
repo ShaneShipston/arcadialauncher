@@ -199,6 +199,8 @@ function openProject(project) {
         ]);
     }
 
+    document.querySelector('.delete-project').classList.remove('btn-load');
+
     openPage('.highlighted-project');
 }
 
@@ -821,8 +823,11 @@ openRepo.addEventListener('click', () => {
 deleteProjectButton.addEventListener('click', () => {
     // Check for unstaged changes on WordPress only for now
     // git diff-index --quiet HEAD -- || echo "untracked";
+    deleteProjectButton.classList.add('btn-load');
 
-    deleteProject(activeProject);
+    deleteProject(activeProject).then(() => {
+        deleteProjectButton.classList.remove('btn-load');
+    });
 });
 
 /**
