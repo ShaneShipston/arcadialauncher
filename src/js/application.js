@@ -796,7 +796,7 @@ const openBrowser = document.querySelector('.open-browser');
 const openDirectory = document.querySelector('.open-directory');
 const openEditor = document.querySelector('.open-editor');
 const openRepo = document.querySelector('.open-repo');
-const deleteProject = document.querySelector('.delete-project');
+const deleteProjectButton = document.querySelector('.delete-project');
 
 openBrowser.addEventListener('click', () => {
     electron.shell.openExternal(activeProject.getURL());
@@ -824,7 +824,7 @@ openRepo.addEventListener('click', () => {
     openRepo.closest('.dropdown').classList.remove('open');
 });
 
-deleteProject.addEventListener('click', () => {
+deleteProjectButton.addEventListener('click', () => {
     // Check for unstaged changes on WordPress only for now
     // git diff-index --quiet HEAD -- || echo "untracked";
 
