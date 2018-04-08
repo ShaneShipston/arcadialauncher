@@ -228,6 +228,21 @@ function updateProjectList(allProjects) {
     });
 }
 
+function updateProjectListBasedOnPreference() {
+    switch (store.get('projectOrder')) {
+    default:
+    case 'created':
+        updateProjectList(projects.sortByAge('asc'));
+        break;
+    case 'oldest':
+        updateProjectList(projects.sortByAge('desc'));
+        break;
+    case 'alpha':
+        updateProjectList(projects.sortAlphabetically());
+        break;
+    }
+}
+
 function checkDirectoryRepo() {
     exec(`cd ${store.get('directory')} && git remote update`, (error) => {
         if (error) {
@@ -303,18 +318,7 @@ electron.ipcRenderer.on('loaded', (event, data) => {
         initServerButton.disabled = false;
     }
 
-    switch (store.get('projectOrder')) {
-    default:
-    case 'created':
-        updateProjectList(projects.sortByAge('asc'));
-        break;
-    case 'oldest':
-        updateProjectList(projects.sortByAge('desc'));
-        break;
-    case 'alpha':
-        updateProjectList(projects.sortAlphabetically());
-        break;
-    }
+    updateProjectListBasedOnPreference();
 
     const activeButton = document.querySelector('.project-order.active');
     const newActiveButton = document.querySelector(`.project-order[data-order="${store.get('projectOrder')}"]`);
@@ -471,20 +475,9 @@ Array.from(projectOrdering).forEach((target) => {
         activeButton.classList.remove('active');
         target.classList.add('active');
 
-        switch (target.getAttribute('data-order')) {
-        default:
-        case 'created':
-            updateProjectList(projects.sortByAge('asc'));
-            break;
-        case 'oldest':
-            updateProjectList(projects.sortByAge('desc'));
-            break;
-        case 'alpha':
-            updateProjectList(projects.sortAlphabetically());
-            break;
-        }
-
         store.set('projectOrder', target.getAttribute('data-order'));
+
+        updateProjectListBasedOnPreference();
 
         const dropDown = document.querySelector('.sorting-dropdown');
         dropDown.classList.remove('open');
