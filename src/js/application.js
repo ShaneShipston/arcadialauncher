@@ -227,12 +227,12 @@ function updateProjectListBasedOnPreference() {
 }
 
 function checkDirectoryRepo() {
-    exec(`cd ${store.get('directory')} && git remote update`, (error) => {
+    server.exec('git remote update', (error) => {
         if (error) {
             return;
         }
 
-        exec(`cd ${store.get('directory')} && git status -sb`, (error2, stdout) => {
+        server.exec('git status -sb', (error2, stdout) => {
             if (error2) {
                 return;
             }
