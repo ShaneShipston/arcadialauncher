@@ -4,12 +4,12 @@ import commandExists from 'command-exists';
 import os from 'os';
 import electron from 'electron';
 import { exec } from 'child_process';
+import Console from './console';
+import Project from './project';
+import Projects from './projects';
+import Server from './server';
 import Store from './store';
 import Toolbar from './toolbar';
-import Console from './console';
-import Projects from './projects';
-import Project from './project';
-import Server from './server';
 
 const remote = electron.remote;
 const homePath = (electron.app || electron.remote.app).getPath('home');
