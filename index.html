@@ -78,7 +78,7 @@
             </div>
             <div class="output">
                 <header class="alerts hidden">
-                    <div class="arrows hidden">
+                    <div class="arrows">
                         <button type="button" disabled>
                             <fa class="fa fa-angle-left"></fa>
                         </button>
@@ -86,21 +86,7 @@
                             <fa class="fa fa-angle-right"></fa>
                         </button>
                     </div>
-                    <ul class="messages">
-                        <li class="hidden active">
-                            <div class="msg">Your working directory is behind by 2 commits</div>
-                            <div class="actions">
-                                <button type="button" class="btn btn-xs btn-default update-server">Update</button>
-                                <button type="button" class="btn btn-xs ignore-alert">Ignore</button>
-                            </div>
-                        </li>
-                        <li class="hidden">
-                            <div class="msg">There is a conflict with another vagrant machine</div>
-                            <div class="actions">
-                                <button type="button" class="btn btn-xs btn-default">Check again</button>
-                            </div>
-                        </li>
-                    </ul>
+                    <ul class="messages"></ul>
                 </header>
                 <div class="section dashboard">
                     <div class="system-checks">
