@@ -4,6 +4,7 @@ import commandExists from 'command-exists';
 import os from 'os';
 import electron from 'electron';
 import { exec } from 'child_process';
+import Alerts from './alerts';
 import Console from './console';
 import Project from './project';
 import Projects from './projects';
@@ -69,6 +70,11 @@ const server = new Server({
     terminal,
     indicator: document.querySelector('.status-server'),
 });
+
+/**
+ * Alerts
+ */
+const alertBox = new Alerts(document.querySelector('.alerts'));
 
 /**
  * Helpers
