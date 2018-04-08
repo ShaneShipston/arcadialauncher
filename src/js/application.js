@@ -429,21 +429,6 @@ updateServer.addEventListener('click', () => {
 });
 
 /**
- * Ignore Alerts
- */
-const ignoreAlerts = document.querySelectorAll('.ignore-alert');
-
-Array.from(ignoreAlerts).forEach((target) => {
-    target.addEventListener('click', () => {
-        const alerts = document.querySelector('.alerts');
-        const warning = target.closest('li');
-
-        alerts.classList.add('hidden');
-        warning.classList.add('hidden');
-    });
-});
-
-/**
  * Utilities
  */
 const toggleBar = document.querySelectorAll('.toggle-bar');
