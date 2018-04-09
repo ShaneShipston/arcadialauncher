@@ -170,8 +170,7 @@
     background: rgba(255,255,255,0.1);
     position: relative;
     overflow: auto;
-    padding: 0.325rem 0;
-    margin-right: 0.325rem;
+    padding: 0.325rem 0.325rem 0.325rem 0;
 
     &:before {
         content: "";
