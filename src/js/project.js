@@ -24,7 +24,7 @@ export default class Project {
         this.data[key] = value;
     }
     has(key) {
-        return Object.prototype.hasOwnProperty.call(this.data, key);
+        return Object.prototype.hasOwnProperty.call(this.data, key) && this.data[key] !== null;
     }
     getDomain() {
         return this.get('domain');

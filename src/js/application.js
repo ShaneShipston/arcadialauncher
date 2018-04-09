@@ -245,12 +245,6 @@ function updateProjectList(allProjects) {
         const tempURL = document.createElement('a');
         const tempElement = document.createElement('li');
 
-        // Temp Patch
-        if (!details.has('directory')) {
-            allProjects.update(details.get('domain'), store.get('directory'));
-        }
-        // End Temp Path
-
         tempURL.innerHTML = details.getDomainName();
         tempURL.setAttribute('href', '#');
 
@@ -337,6 +331,16 @@ electron.ipcRenderer.on('loaded', (event, data) => {
     });
 
     checkRequirements();
+
+    // Temp Patch
+    projects.sortByAge().forEach((details) => {
+        if (!details.has('directory')) {
+            projects.update(details.get('domain'), {
+                directory: store.get('directory'),
+            });
+        }
+    });
+    // End Temp Patch
 
     if (store.get('initalized')) {
         initServerButton.innerHTML = 'Checking server status';
