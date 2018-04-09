@@ -1,8 +1,14 @@
 table {
     width: 100%;
+    border-spacing: 0;
 
     td,
     th {
         padding: 0.25rem 0.5rem;
+        line-height: 1em;
+
+        &:first-child {
+            padding-left: 0;
+        }
     }
 }
