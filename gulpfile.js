@@ -20,7 +20,7 @@ const config = {
     },
 };
 
-gulp.task('watch', () => {
+function monitor(cb) {
     // CSS
     watch(config.src.css, () => {
         gulp.start('styles');
@@ -35,10 +35,12 @@ gulp.task('watch', () => {
     watch(config.src.js, () => {
         gulp.start('javascript');
     });
-});
 
-gulp.task('styles', () => {
-    gulp.src(config.src.css)
+    cb();
+}
+
+function styles() {
+    return gulp.src(config.src.css)
         .pipe(sass({
             outputStyle: 'compressed',
         }).on('error', sass.logError))
@@ -47,15 +49,15 @@ gulp.task('styles', () => {
         }))
         .pipe(minifycss())
         .pipe(gulp.dest(config.dest.css));
-});
+}
 
-gulp.task('images', () => {
-    gulp.src(config.src.img)
+function images() {
+    return gulp.src(config.src.img)
         .pipe(imagemin())
         .pipe(gulp.dest(config.dest.img));
-});
+}
 
-gulp.task('javascript', (callback) => {
+function javascript(cb) {
     webpack(webpackconfig, (err, stats) => {
         if (err) {
             throw new gutil.PluginError('webpack:build', err);
@@ -65,25 +67,9 @@ gulp.task('javascript', (callback) => {
             colors: true,
         }));
 
-        callback();
+        cb();
     });
-});
+}
 
-// --- [BUILD TASKS] ---
-
-gulp.task('build', () => {
-    gulp.src(config.src.css)
-        .pipe(sass({
-            outputStyle: 'compressed',
-            errLogToConsole: true,
-        }))
-        .pipe(prefix({
-            remove: false,
-            cascade: false,
-        }))
-        .pipe(minifycss())
-        .pipe(gulp.dest(config.dest.css));
-});
-
-gulp.task('init', ['styles', 'javascript']);
-gulp.task('default', ['styles', 'images', 'javascript', 'watch']);
+exports.init = gulp.series(styles, javascript);
+exports.default = gulp.series(styles, images, javascript, monitor);
