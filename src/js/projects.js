@@ -35,7 +35,7 @@ export default class Projects {
     delete(domain) {
         const projectIndex = this.findIndex(domain);
 
-        if (projectIndex) {
+        if (projectIndex >= 0) {
             this.projects.splice(projectIndex, 1);
         }
 
