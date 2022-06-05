@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const prefix = require('gulp-autoprefixer');
 const minifycss = require('gulp-clean-css');
 const imagemin = require('gulp-imagemin');
