@@ -179,6 +179,60 @@ function openPage(...elements) {
     });
 }
 
+function renderBackups(project) {
+    const backupList = document.getElementById('backups');
+    backupList.innerHTML = '';
+    backupList.classList.add('hidden');
+
+    if (project.has('backups')) {
+        document.querySelector('.backup-toggle').classList.remove('hidden');
+        document.querySelector('.backup-toggle .fa').classList.remove('fa-chevron-down');
+        document.querySelector('.backup-toggle .fa').classList.add('fa-chevron-right');
+        document.querySelector('.backup-total').innerHTML = project.getBackups().length;
+
+        let html = '';
+
+        project.getBackups().forEach((backup) => {
+            html += `<div class="backup-bullet">
+                <div class="reference">
+                    <div class="label">
+                        ${backup.output}
+                    </div>
+                    <div class="icons">
+                        ${backup.type === 'full' ? '<em class="fa fa-database"></em><em class="fa fa-files-o"></em>' : ''}
+                        ${backup.type === 'files' ? '<em class="fa fa-files-o"></em>' : ''}
+                        ${backup.type === 'db' ? '<em class="fa fa-database"></em>' : ''}
+                    </div>
+                </div>
+                <button type="button" class="btn btn-xs btn-default" onclick="restore('${backup.type}', '${backup.output}')">Restore</button>
+            </div>`;
+        });
+
+        backupList.innerHTML = html;
+    } else {
+        document.querySelector('.backup-toggle').classList.add('hidden');
+    }
+}
+
+window.restore = function (type, output) {
+    const project = activeProject;
+
+    return server.bash('restore.sh', [
+        '--site',
+        project.getDomain(),
+        '--output',
+        output,
+        '--type',
+        type,
+    ]).then(() => {
+        const highlightedProject = document.querySelector('.highlighted-project');
+
+        if (!highlightedProject.classList.contains('hidden') && project.getDomainName() === activeProject.getDomainName()) {
+            renderBackups(project);
+        }
+    });
+}
+
 function openProject(project) {
     activeProject = project;
 
@@ -200,7 +254,10 @@ function openProject(project) {
         ]);
     }
 
+    renderBackups(project);
+
     document.querySelector('.delete-project').classList.remove('btn-load');
+    document.querySelector('.default-backup').classList.remove('btn-load');
 
     openPage('.highlighted-project');
 }
@@ -316,6 +373,46 @@ function checkDirectoryRepo() {
     });
 }
 
+function backupProject(project, type = 'full') {
+    let yourDate = new Date();
+    const offset = yourDate.getTimezoneOffset();
+    yourDate = new Date(yourDate.getTime() - (offset*60*1000));
+    const outputFormat = yourDate.toISOString().substring(0, 16).replace('T', '-').replace(':','-');
+
+    const args = [
+        '--site',
+        project.getDomain(),
+        '--output',
+        outputFormat,
+    ];
+
+    if (type === 'db') {
+        args.push('--db-only');
+    }
+
+    if (type === 'files') {
+        args.push('--files-only');
+    }
+
+    return server.bash('backup.sh', args).then(() => {
+        const highlightedProject = document.querySelector('.highlighted-project');
+        const backups = project.getBackups();
+
+        backups.push({
+            type,
+            output: outputFormat,
+        });
+
+        project.set('backups', backups);
+        projects.update(project.getDomain(), project.all());
+
+        if (!highlightedProject.classList.contains('hidden') &&
+            project.getDomainName() === activeProject.getDomainName()) {
+            renderBackups(project);
+        }
+    });
+}
+
 /**
  * App Loaded
  */
@@ -420,6 +517,10 @@ initServer.addEventListener('click', () => {
  * Utilities
  */
 const toggleBar = document.querySelectorAll('.toggle-bar');
+const toggler = document.querySelectorAll('[data-toggle]');
+const sorting = document.querySelector('.sorting');
+const dropdownTriggers = document.querySelectorAll('.action-dropdown');
+const projectOrdering = document.querySelectorAll('.project-order');
 
 Array.from(toggleBar).forEach((target) => {
     target.addEventListener('click', () => {
@@ -433,8 +534,6 @@ Array.from(toggleBar).forEach((target) => {
     });
 });
 
-const toggler = document.querySelectorAll('[data-toggle]');
-
 Array.from(toggler).forEach((target) => {
     target.addEventListener('change', (e) => {
         const toggleElement = document.querySelector(target.getAttribute('data-toggle'));
@@ -447,14 +546,10 @@ Array.from(toggler).forEach((target) => {
     });
 });
 
-const sorting = document.querySelector('.sorting');
-
 sorting.addEventListener('click', () => {
     const dropDown = document.querySelector('.sorting-dropdown');
     dropDown.classList.toggle('open');
 });
-
-const dropdownTriggers = document.querySelectorAll('.action-dropdown');
 
 Array.from(dropdownTriggers).forEach((target) => {
     target.addEventListener('click', () => {
@@ -467,8 +562,6 @@ Array.from(dropdownTriggers).forEach((target) => {
         dropdown.classList.toggle('open');
     });
 });
-
-const projectOrdering = document.querySelectorAll('.project-order');
 
 Array.from(projectOrdering).forEach((target) => {
     target.addEventListener('click', () => {
@@ -826,12 +919,38 @@ openRepo.addEventListener('click', () => {
 });
 
 deleteProjectButton.addEventListener('click', () => {
-    // Check for unstaged changes on WordPress only for now
-    // git diff-index --quiet HEAD -- || echo "untracked";
     deleteProjectButton.classList.add('btn-load');
 
     deleteProject(activeProject).then(() => {
         deleteProjectButton.classList.remove('btn-load');
+    });
+});
+
+const defaultBackupButton = document.querySelector('.default-backup');
+const backupFiles = document.querySelector('.backup-files');
+const backupDB = document.querySelector('.backup-db');
+
+defaultBackupButton.addEventListener('click', () => {
+    defaultBackupButton.classList.add('btn-load');
+
+    backupProject(activeProject).then(() => {
+        defaultBackupButton.classList.remove('btn-load');
+    });
+});
+
+backupFiles.addEventListener('click', () => {
+    defaultBackupButton.classList.add('btn-load');
+
+    backupProject(activeProject, 'files').then(() => {
+        defaultBackupButton.classList.remove('btn-load');
+    });
+});
+
+backupDB.addEventListener('click', () => {
+    defaultBackupButton.classList.add('btn-load');
+
+    backupProject(activeProject, 'db').then(() => {
+        defaultBackupButton.classList.remove('btn-load');
     });
 });
 

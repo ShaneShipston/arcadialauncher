@@ -222,9 +222,9 @@
                         </ul> -->
                     </header>
                     <main class="project-details">
-                        <div class="toggle-bar hidden" data-target="backups">
-                            <label>Backups</label>
-                            <em class="fa fa-chevron-down"></em>
+                        <div class="toggle-bar hidden backup-toggle" data-target="backups">
+                            <label><span class="backup-total"></span> Backups</label>
+                            <em class="fa fa-chevron-right"></em>
                         </div>
 
                         <div id="backups" class="toggle-body hidden">
@@ -262,7 +262,24 @@
                                     </li>
                                 </ul>
                             </div>
-                            <button type="button" class="btn btn-xs btn-default"><em class="fa fa-server"></em> Backup</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs btn-default default-backup"><em class="fa fa-server"></em> Backup</button>
+                                <button type="button" class="btn btn-xs btn-default btn-icon action-dropdown"><em class="fa fa-caret-down"></em></button>
+                                <ul class="dropdown">
+                                    <li>
+                                        <button type="button" class="backup-db">
+                                            <em class="fa fa-database"></em>
+                                            Database Only
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="backup-files">
+                                            <em class="fa fa-files-o"></em>
+                                            Files Only
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="destructive">
                             <button type="button" class="btn btn-xs btn-danger btn-outline delete-project">Destroy</button>

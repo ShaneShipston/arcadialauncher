@@ -27,4 +27,41 @@
         justify-content: space-between;
         margin-top: 2rem;
     }
+
+    .toggle-body {
+        padding: 0;
+    }
+
+    .backup-total {
+        background: #404a55;
+        border-radius: 99rem;
+        padding: 0.125rem 0.75rem;
+        margin-right: 1rem;
+    }
+
+    .backup-bullet {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+
+        &:nth-child(even) {
+            background: #404a55;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .icons {
+            display: flex;
+            align-items: center;
+            font-size: 0.8em;
+            margin-top: 0.5rem;
+
+            em:not(:first-child) {
+                margin-left: 0.75rem;
+            }
+        }
+    }
 }

@@ -53,4 +53,11 @@ export default class Project {
     getRepoURL() {
         return `https://bitbucket.org/${this.getRepo()}`;
     }
+    getBackups() {
+        if (!this.has('backups')) {
+            return [];
+        }
+
+        return this.data.backups;
+    }
 }
