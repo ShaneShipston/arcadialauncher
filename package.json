@@ -16,7 +16,7 @@
     "command-exists": "^1.2.8",
     "electron": "^1.8.8",
     "electron-window-state": "^4.1.1",
-    "gulp": "^5.0.0",
+    "gulp": "^4.0.0",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-clean-css": "^3.10.0",
     "gulp-imagemin": "^4.1.0",
